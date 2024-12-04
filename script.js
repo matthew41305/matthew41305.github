@@ -51,6 +51,40 @@ document.addEventListener("DOMContentLoaded", () => {
     
         // If no winner is found and the board is not full, return null (indicating the game continues)
         return null;
-    };
+    }
+
+        const handleSquareClick = (e) => {
+            // Get the index of the clicked square by finding its position in the 'squares' NodeList
+            const squareIndex = [...squares].indexOf(e.target);
+        
+            // If the game is not active or the square is already occupied, exit the function
+            if (!gameActive || board[squareIndex]) return;
+        
+            // Update the board array at the clicked square's index with the current player's symbol ('X' or 'O')
+            board[squareIndex] = currentTurn;
+        
+            // Update the clicked square's text content to display the current player's symbol
+            e.target.textContent = currentTurn;
+        
+            // Check if there's a winner or a tie after the move
+            const winner = checkWinner();
+        
+            // If a winner is found or the game ends in a tie
+            if (winner) {
+                // Update the turn tracker to display the winner or announce a tie
+                turnTracker.textContent = winner === 'Tie' ? "It's a tie!" : `Player ${winner} wins!`;
+                
+                // Set the gameActive flag to false, indicating the game is over
+                gameActive = false;
+            } else {
+                // If no winner is found, switch to the other player's turn
+                currentTurn = currentTurn === 'X' ? 'O' : 'X';
+        
+                // Update the turn tracker to show which player's turn it is next
+                turnTracker.textContent = currentTurn;
+            }
+        };
     
+        
+
 });
