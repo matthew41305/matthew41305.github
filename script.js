@@ -31,8 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         [2, 4, 6], // Right-to-left diagonal
     ];
 
-    // Further functionality would go here to handle game logic, user interaction, etc.
-
+    // Function to check for a winner or tie
     const checkWinner = () => {
         // Iterate over each winning combination in the array
         for (const [a, b, c] of winningCombinations) {
@@ -42,49 +41,74 @@ document.addEventListener("DOMContentLoaded", () => {
                 return board[a];
             }
         }
-    
+
         // Check if all squares on the board are filled, indicating a tie
         if (board.every(square => square)) {
             // If every square is non-null and no winner is found, return 'Tie'
             return 'Tie';
         }
-    
+
         // If no winner is found and the board is not full, return null (indicating the game continues)
         return null;
-    }
+    };
 
-        const handleSquareClick = (e) => {
-            // Get the index of the clicked square by finding its position in the 'squares' NodeList
-            const squareIndex = [...squares].indexOf(e.target);
-        
-            // If the game is not active or the square is already occupied, exit the function
-            if (!gameActive || board[squareIndex]) return;
-        
-            // Update the board array at the clicked square's index with the current player's symbol ('X' or 'O')
-            board[squareIndex] = currentTurn;
-        
-            // Update the clicked square's text content to display the current player's symbol
-            e.target.textContent = currentTurn;
-        
-            // Check if there's a winner or a tie after the move
-            const winner = checkWinner();
-        
-            // If a winner is found or the game ends in a tie
-            if (winner) {
-                // Update the turn tracker to display the winner or announce a tie
-                turnTracker.textContent = winner === 'Tie' ? "It's a tie!" : `Player ${winner} wins!`;
-                
-                // Set the gameActive flag to false, indicating the game is over
-                gameActive = false;
-            } else {
-                // If no winner is found, switch to the other player's turn
-                currentTurn = currentTurn === 'X' ? 'O' : 'X';
-        
-                // Update the turn tracker to show which player's turn it is next
-                turnTracker.textContent = currentTurn;
-            }
-        };
-    
-        
+    // Function to handle a square click event
+    const handleSquareClick = (e) => {
+        // Get the index of the clicked square by finding its position in the 'squares' NodeList
+        const squareIndex = [...squares].indexOf(e.target);
 
+        // If the game is not active or the square is already occupied, exit the function
+        if (!gameActive || board[squareIndex]) return;
+
+        // Update the board array at the clicked square's index with the current player's symbol ('X' or 'O')
+        board[squareIndex] = currentTurn;
+
+        // Update the clicked square's text content to display the current player's symbol
+        e.target.textContent = currentTurn;
+
+        // Check if there's a winner or a tie after the move
+        const winner = checkWinner();
+
+        // If a winner is found or the game ends in a tie
+        if (winner) {
+            // Update the turn tracker to display the winner or announce a tie
+            turnTracker.textContent = winner === 'Tie' ? "It's a tie!" : `Player ${winner} wins!`;
+
+            // Set the gameActive flag to false, indicating the game is over
+            gameActive = false;
+        } else {
+            // If no winner is found, switch to the other player's turn
+            currentTurn = currentTurn === 'X' ? 'O' : 'X';
+
+            // Update the turn tracker to show which player's turn it is next
+            turnTracker.textContent = currentTurn;
+        }
+    };
+
+    // Function to reset the game to its initial state
+    const resetGame = () => {
+        // Clear the board array (set all squares to null)
+        board.fill(null);
+
+        // Reactivate the game
+        gameActive = true;
+
+        // Set the current turn back to 'X'
+        currentTurn = 'X';
+
+        // Reset the turn tracker display to show the starting player
+        turnTracker.textContent = currentTurn;
+
+        // Clear the content of all squares on the game board
+        squares.forEach(square => (square.textContent = ''));
+    };
+
+    // Attach the click event listener to each game square
+    squares.forEach(square => square.addEventListener('click', handleSquareClick));
+
+    // Attach the click event listener to the "Play Again" button to reset the game
+    playAgainButton.addEventListener('click', resetGame);
+
+    // Call resetGame() to ensure the game starts in a clean state
+    resetGame();
 });
