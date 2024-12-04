@@ -33,4 +33,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Further functionality would go here to handle game logic, user interaction, etc.
 
+    const checkWinner = () => {
+        // Iterate over each winning combination in the array
+        for (const [a, b, c] of winningCombinations) {
+            // Check if the squares at indices a, b, and c are all occupied by the same player
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                // If so, return the value at one of these indices (either 'X' or 'O') as the winner
+                return board[a];
+            }
+        }
+    
+        // Check if all squares on the board are filled, indicating a tie
+        if (board.every(square => square)) {
+            // If every square is non-null and no winner is found, return 'Tie'
+            return 'Tie';
+        }
+    
+        // If no winner is found and the board is not full, return null (indicating the game continues)
+        return null;
+    };
+    
 });
